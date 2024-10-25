@@ -1,0 +1,9 @@
+[package]
+name = "fantasy-name-generator"
+version = "0.1.1"
+edition = "2021"
+
+[dependencies]
+reqwest = { version = "0.12.8", features = ["json"] }  # For HTTP requests
+serde = { version = "1.0.213", features = ["derive"] }   # For serialization and deserialization
+tokio = { version = "1.41.0", features = ["full"] }  # For async runtime

@@ -1,13 +1,11 @@
 import google.generativeai as genai
-import os
-from dotenv import load_dotenv
-load_dotenv()
-genai.configure(api_key=os.getenv("API_KEY"))
+
+genai.configure(api_key='AIzaSyDR22kDc1ZFonm9GltsfkvCHQBDRUm3yzA')
 model = genai.GenerativeModel("gemini-1.5-flash")
 
 
 def getRequiredAttributs(prompt, example):
-    """Get a required attribute with example hint; re-prompt if empty."""
+
     while True:
         user_input = input(f"{prompt} (e.g., {example}) [Required]: ")
         if user_input.strip():
@@ -19,7 +17,6 @@ def getOptionalAttributes(prompt, example):
     return input(f"{prompt} (e.g., {example}) [Optional]: ")
 
 def generate_fantasy_name_prompt():
-    # Required attributes
     requiredAttributes = {
         "typeOfName": "character, place, artifact, creature",
         "genreSetting": "high fantasy, dark fantasy, steampunk, sci-fi",
@@ -27,7 +24,6 @@ def generate_fantasy_name_prompt():
     }
     userInputs = {key: getRequiredAttributs(f"Enter {key}", example) for key, example in requiredAttributes.items()}
 
-    # Optional attributes
     optionalAttributes = {
         "culturalInfluence": "Celtic, Norse, Japanese, Aztec, otherworldly",
         "characterTraits": "brave, mysterious, wise, fierce, ethereal",
@@ -43,7 +39,6 @@ def generate_fantasy_name_prompt():
         "titleStatus": "lord, queen, protector, sage, wanderer",
         "languageOrigin": "Old English, Latin, Elvish, invented language",
     }
-    # Collect optional inputs
     userInputs.update({key: getOptionalAttributes(f"Enter {key}", example) for key, example in optionalAttributes.items()})
     
     promptSections = [
@@ -66,16 +61,13 @@ def generate_fantasy_name_prompt():
         "."
     ]
     
-    # Join non-empty sections to form the final prompt
     combinedPrompt = " ".join(section for section in promptSections if section)
     print(f"Prompt:\n{combinedPrompt}")
     response = model.generate_content(combinedPrompt)
     
-    # Process the response to extract only names
     names = response.text.splitlines()
     names = [name.strip().replace('**', '') for name in names if name.strip() and not name.lower().startswith('##')]
 
-    # Print formatted names with numbering
     for name in names:
         print(f"{name}")
 
